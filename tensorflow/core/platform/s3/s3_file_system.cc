@@ -41,6 +41,7 @@ limitations under the License.
 #include "tensorflow/core/platform/file_system_helper.h"
 #include "tensorflow/core/platform/mutex.h"
 #include "tensorflow/core/platform/path.h"
+#include "tensorflow/core/platform/s3/aws_credentials.h"
 #include "tensorflow/core/platform/s3/aws_crypto.h"
 #include "tensorflow/core/platform/s3/aws_logging.h"
 #include "tensorflow/core/platform/str_util.h"
@@ -105,8 +106,8 @@ Aws::Client::ClientConfiguration& GetDefaultClientConfig() {
         Aws::Config::AWSConfigFileProfileConfigLoader loader(config_file);
         loader.Load();
         auto profiles = loader.GetProfiles();
-        if (!profiles["default"].GetRegion().empty()) {
-          cfg.region = profiles["default"].GetRegion();
+        if (!profiles[Aws::Auth::GetConfigProfileName()].GetRegion().empty()) {
+          cfg.region = profiles[Aws::Auth::GetConfigProfileName()].GetRegion();
         }
       }
     }
@@ -416,6 +417,7 @@ std::shared_ptr<Aws::S3::S3Client> S3FileSystem::GetS3Client() {
     // the bucket may not be resolved. Disabling of virtual addressing
     // should address the issue. See GitHub issue 16397 for details.
     this->s3_client_ = std::shared_ptr<Aws::S3::S3Client>(new Aws::S3::S3Client(
+        Aws::MakeShared<STSEnabledCredentialsProviderChain>(STSEnabledCredentialsProviderChainTag),
         GetDefaultClientConfig(),
         Aws::Client::AWSAuthV4Signer::PayloadSigningPolicy::Never, false));
   }

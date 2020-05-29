@@ -16,6 +16,8 @@ load(
 tf_cc_binary(
     name = "libs3_file_system_shared.so",
     srcs = [
+        "aws_credentials.cc",
+        "aws_credentials.h",
         "aws_crypto.cc",
         "aws_crypto.h",
         "aws_logging.cc",
@@ -39,6 +41,23 @@ tf_cc_binary(
         "@com_google_protobuf//:protobuf_headers",
         "@curl",
     ],
+)
+
+cc_library(
+    name = "aws_credentials",
+    srcs = [
+        "aws_credentials.cc",
+    ],
+    hdrs = [
+        "aws_credentials.h",
+    ],
+    deps = [
+        "//tensorflow/core:lib",
+        "//tensorflow/core:lib_internal",
+        "//tensorflow/core/platform:stringprintf",
+        "@aws",
+    ],
+    alwayslink = 1,
 )
 
 cc_library(
@@ -89,6 +108,7 @@ cc_library(
     }) + [
         ":aws_crypto",
         ":aws_logging",
+        ":aws_credentials",
         "//tensorflow/core:lib",
         "//tensorflow/core:lib_internal",
         "//tensorflow/core/platform:path",

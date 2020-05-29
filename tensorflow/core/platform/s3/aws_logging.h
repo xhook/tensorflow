@@ -59,6 +59,7 @@ class AWSLogSystem : public Aws::Utils::Logging::LogSystemInterface {
 
  private:
   void LogMessage(Aws::Utils::Logging::LogLevel log_level,
+                  const char* tag,
                   const string& message);
   std::atomic<Aws::Utils::Logging::LogLevel> log_level_;
 

@@ -54,34 +54,37 @@ void AWSLogSystem::Log(Aws::Utils::Logging::LogLevel log_level, const char* tag,
 
   va_end(args);
 
-  LogMessage(log_level, s);
+  LogMessage(log_level, tag, s);
 }
 
 void AWSLogSystem::LogStream(Aws::Utils::Logging::LogLevel log_level,
                              const char* tag,
                              const Aws::OStringStream& message_stream) {
-  LogMessage(log_level, message_stream.rdbuf()->str().c_str());
+  LogMessage(log_level, tag, message_stream.rdbuf()->str().c_str());
 }
 
 void AWSLogSystem::LogMessage(Aws::Utils::Logging::LogLevel log_level,
+                              const char* tag,
                               const std::string& message) {
   if (message == "Initializing Curl library") return;
+  std::string message_with_tag =
+      tag == nullptr ? message : std::string("[") + tag + "] " + message;
   switch (log_level) {
     case Aws::Utils::Logging::LogLevel::Info:
-      LOG(INFO) << message;
+      LOG(INFO) << message_with_tag;
       break;
     case Aws::Utils::Logging::LogLevel::Warn:
-      LOG(WARNING) << message;
+      LOG(WARNING) << message_with_tag;
       break;
     case Aws::Utils::Logging::LogLevel::Error:
-      LOG(ERROR) << message;
+      LOG(ERROR) << message_with_tag;
       break;
     case Aws::Utils::Logging::LogLevel::Fatal:
-      LOG(FATAL) << message;
+      LOG(FATAL) << message_with_tag;
       break;
     default:
       // this will match for DEBUG, TRACE
-      LOG(INFO) << message;
+      LOG(INFO) << message_with_tag;
       break;
   }
 }

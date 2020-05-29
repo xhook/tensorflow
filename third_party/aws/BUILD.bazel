@@ -40,6 +40,8 @@ cc_library(
             "aws-cpp-sdk-core/source/net/windows/*.cpp",
         ]),
     }) + glob([
+        "aws-cpp-sdk-cognito-identity/include/**/*.h",
+        "aws-cpp-sdk-cognito-identity/source/**/*.cpp",
         "aws-cpp-sdk-core/include/**/*.h",
         "aws-cpp-sdk-core/source/*.cpp",
         "aws-cpp-sdk-core/source/auth/**/*.cpp",
@@ -62,8 +64,12 @@ cc_library(
         "aws-cpp-sdk-core/source/utils/xml/**/*.cpp",
         "aws-cpp-sdk-core/source/utils/crypto/*.cpp",
         "aws-cpp-sdk-core/source/utils/crypto/factory/**/*.cpp",
+        "aws-cpp-sdk-identity-management/include/**/*.h",
+        "aws-cpp-sdk-identity-management/source/**/*.cpp",
         "aws-cpp-sdk-s3/include/**/*.h",
         "aws-cpp-sdk-s3/source/**/*.cpp",
+        "aws-cpp-sdk-sts/include/**/*.h",
+        "aws-cpp-sdk-sts/source/**/*.cpp",
         "aws-cpp-sdk-transfer/include/**/*.h",
         "aws-cpp-sdk-transfer/source/**/*.cpp",
         "aws-cpp-sdk-core/source/monitoring/*.cpp",
@@ -109,8 +115,11 @@ cc_library(
         "//conditions:default": [],
     }),
     includes = [
+        "aws-cpp-sdk-cognito-identity/include/",
         "aws-cpp-sdk-core/include/",
+        "aws-cpp-sdk-identity-management/include/",
         "aws-cpp-sdk-s3/include/",
+        "aws-cpp-sdk-sts/include/",
         "aws-cpp-sdk-transfer/include/",
     ],
     linkopts = select({

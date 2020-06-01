@@ -417,7 +417,8 @@ std::shared_ptr<Aws::S3::S3Client> S3FileSystem::GetS3Client() {
     // the bucket may not be resolved. Disabling of virtual addressing
     // should address the issue. See GitHub issue 16397 for details.
     this->s3_client_ = std::shared_ptr<Aws::S3::S3Client>(new Aws::S3::S3Client(
-        Aws::MakeShared<STSEnabledCredentialsProviderChain>(STSEnabledCredentialsProviderChainTag),
+        Aws::MakeShared<STSEnabledCredentialsProviderChain>(
+            STSEnabledCredentialsProviderChainTag),
         GetDefaultClientConfig(),
         Aws::Client::AWSAuthV4Signer::PayloadSigningPolicy::Never, false));
   }

@@ -16,11 +16,12 @@ limitations under the License.
 #ifndef TENSORFLOW_CONTRIB_S3_S3_LOGGING_H_
 #define TENSORFLOW_CONTRIB_S3_S3_LOGGING_H_
 
+#include <aws/core/utils/logging/LogLevel.h>
+#include <aws/core/utils/logging/LogSystemInterface.h>
+
 #include <atomic>
 #include <string>
 
-#include <aws/core/utils/logging/LogLevel.h>
-#include <aws/core/utils/logging/LogSystemInterface.h>
 #include "tensorflow/core/platform/default/logging.h"
 
 namespace tensorflow {
@@ -58,8 +59,7 @@ class AWSLogSystem : public Aws::Utils::Logging::LogSystemInterface {
   void Flush() override;
 
  private:
-  void LogMessage(Aws::Utils::Logging::LogLevel log_level,
-                  const char* tag,
+  void LogMessage(Aws::Utils::Logging::LogLevel log_level, const char* tag,
                   const string& message);
   std::atomic<Aws::Utils::Logging::LogLevel> log_level_;
 

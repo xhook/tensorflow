@@ -23,27 +23,26 @@ namespace tensorflow {
 
 using namespace Aws::Auth;
 
-STSEnabledCredentialsProviderChain::STSEnabledCredentialsProviderChain() 
-    : DefaultAWSCredentialsProviderChain()
-{
+STSEnabledCredentialsProviderChain::STSEnabledCredentialsProviderChain()
+    : DefaultAWSCredentialsProviderChain() {
   DefaultAWSCredentialsProviderChain::AddProvider(
-    Aws::MakeShared<STSProfileCredentialsProvider>(
-      STSEnabledCredentialsProviderChainTag));
+      Aws::MakeShared<STSProfileCredentialsProvider>(
+          STSEnabledCredentialsProviderChainTag));
 }
 
-// Override DefaultAWSCredentialsProviderChain::GetAWSCredentials 
+// Override DefaultAWSCredentialsProviderChain::GetAWSCredentials
 // to add extra logging
 AWSCredentials STSEnabledCredentialsProviderChain::GetAWSCredentials() {
   for (auto&& credentialsProvider : GetProviders()) {
     AWSCredentials credentials = credentialsProvider->GetAWSCredentials();
-    if (!credentials.GetAWSAccessKeyId().empty() && 
+    if (!credentials.GetAWSAccessKeyId().empty() &&
         !credentials.GetAWSSecretKey().empty()) {
       LOG(INFO) << "Using access key " << credentials.GetAWSAccessKeyId();
       return credentials;
     }
   }
-  LOG(INFO) << "Could not find any credentials";  
+  LOG(INFO) << "Could not find any credentials";
   return AWSCredentials();
 }
 
-} // namespace tensorflow
+}  // namespace tensorflow

@@ -64,8 +64,7 @@ void AWSLogSystem::LogStream(Aws::Utils::Logging::LogLevel log_level,
 }
 
 void AWSLogSystem::LogMessage(Aws::Utils::Logging::LogLevel log_level,
-                              const char* tag,
-                              const std::string& message) {
+                              const char* tag, const std::string& message) {
   if (message == "Initializing Curl library") return;
   std::string message_with_tag =
       tag == nullptr ? message : std::string("[") + tag + "] " + message;
